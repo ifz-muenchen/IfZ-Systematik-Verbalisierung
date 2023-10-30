@@ -1,7 +1,7 @@
 # IfZ-Systematik - Verbalisierung im OPAC
 
 Bei der Titelanzeige im OPAC kann unter dem Reiter *mehr zum Titel* eine Verbalisierung der Sytematikpunkte des Titels angezeigt werden.
-Durch einen Klick auf die Verbalisierung oder das *+*-Zeichen in der rechten Ecke wird auch die Einordnung des Systematikpunktes in den größeren Kontext angezeigt.
+Durch einen Klick auf die Verbalisierung oder das *+-Symbol* in der rechten Ecke wird auch die Einordnung des Systematikpunktes in den größeren Kontext angezeigt.
 
 ## Im OPAC-Code durchgeführte Änderungen
 
