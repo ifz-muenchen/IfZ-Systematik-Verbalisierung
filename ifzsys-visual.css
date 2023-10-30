@@ -1,0 +1,35 @@
+.collapsible {
+  background-color: white;
+  cursor: help;
+  padding: 5px 0 5px 0;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-family:inherit;
+  font-size: inherit;
+}
+
+.active, .collapsible:hover {
+  background-color: #f4f4f4;
+}
+
+.collapsible:after {
+  content: '\002B';
+  color: default; /* text color for the plus sign */
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "";
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #f4f4f4;
+}
