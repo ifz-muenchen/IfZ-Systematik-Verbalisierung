@@ -6,6 +6,7 @@ Durch einen Klick auf die Verbalisierung oder das *+*-Zeichen in der rechten Eck
 ## Im OPAC-Code durchgeführte Änderungen
 
 **jsp -> common -> metaHeader.jsp**
+
 Hinzugefügte Zeilen:
 ```html
 <link rel="stylesheet" href="${pageContext.request.contextPath}/jsp/result/ifzsys-visual.css" type="text/css"/>
@@ -14,6 +15,7 @@ Hinzugefügte Zeilen:
 ---
 
 **jsp -> result -> titelInfo.jsp**
+
 Hinzugefügte Zeilen:
 ```js
 // IfZ Visual
@@ -42,5 +44,7 @@ Veränderter Block:
 ---
 
 **Neu erstellte Dateien**
+
 *ifzsys-visual.css* im Ordner `jsp -> result`
+
 *ifzsysVisual.js* im Ordner `js`
