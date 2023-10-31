@@ -5,7 +5,8 @@
  * derived from https://github.com/bvb-kobv-allianz/RVK-VISUAL
  */
 
-const ifzSystematikURL = 'https://ifz-muenchen.github.io/IfZ-Systematik/sys.xml';
+// opac.xml is a copy of sys.xml without superfluous attributes
+const ifzSystematikURL = 'https://ifz-muenchen.github.io/IfZ-Systematik/opac.xml';
 const ifzOpacSearchURL = 'https://opac.ifz-muenchen.de/cgi-bin/search?ifzsys=';
 // TODO is this link more stable? https://opac.ifz-muenchen.de/webOPACClient.ifzsis/search.do?methodToCall=quickSearch&Kateg=1708&Content=
 const xmlDoc = loadXMLDoc(ifzSystematikURL);
