@@ -6,10 +6,11 @@
  */
 
 // opac.xml is a copy of sys.xml without superfluous attributes
-const ifzSystematikURL = 'https://ifz-muenchen.github.io/IfZ-Systematik/opac.xml';
+const ifzSystematikURLred = 'https://ifz-muenchen.github.io/IfZ-Systematik/opac.xml';
+const ifzSystematikURL = 'https://ifz-muenchen.github.io/IfZ-Systematik/sys.xml';
 const ifzOpacSearchURL = 'https://opac.ifz-muenchen.de/cgi-bin/search?ifzsys=';
 // TODO is this link more stable? https://opac.ifz-muenchen.de/webOPACClient.ifzsis/search.do?methodToCall=quickSearch&Kateg=1708&Content=
-const xmlDoc = loadXMLDoc(ifzSystematikURL);
+const xmlDoc = loadXMLDoc(ifzSystematikURLred);
 
 /**
  * Creates instance of IfzsysVisual with default values.
