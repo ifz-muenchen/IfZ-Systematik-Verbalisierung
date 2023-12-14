@@ -90,10 +90,11 @@ class IfzsysVisual {
 		// Populate the contentDiv with ancestor notations and verbalizations
 		const ancestors = notationInfo.ancestors;
 		if (ancestors && ancestors.length > 0) {
-			for (const ancestor of ancestors) {
+			for (const [index, ancestor] of ancestors.entries()) {
 				const paragraph = document.createElement('div');
-				paragraph.innerHTML = `⮤ <a href="${ifzSystematikURL}" target="_blank" title="Zur Systematik-Website (neuer Tab)">${ancestor.notation.replaceAll('_', ' ')}</a>: ${ancestor.name}`;
-				contentDiv.append(paragraph);
+				const arrowIfNotFirst = (index === ancestors.length - 1) ? '' : '↳ ';
+				paragraph.innerHTML = `${arrowIfNotFirst}<a href="${ifzSystematikURL}" target="_blank" title="Zur Systematik-Website (neuer Tab)">${ancestor.notation.replaceAll('_', ' ')}</a>: ${ancestor.name}`;
+				contentDiv.prepend(paragraph);
 			}
 		}
 
