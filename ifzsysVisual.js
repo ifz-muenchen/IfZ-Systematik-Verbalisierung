@@ -56,6 +56,11 @@ class IfzsysVisual {
 			const ancestors = [];
 			let currentAncestor = notationElement.parentNode;
 			while (currentAncestor.nodeName !== 'IfZ-Systematik') {
+				if (currentAncestor.parentNode && currentAncestor.parentNode.parentNode && currentAncestor.parentNode.parentNode.nodeName === 'IfZ-Systematik') {
+					// currentAncestor is a grandchild, so skip iteration
+					currentAncestor = currentAncestor.parentNode;
+					continue;
+				}
 				const ancestorNotation = currentAncestor.nodeName;
 				const ancestorName = currentAncestor.getAttribute('Benennung');
 				ancestors.push({
@@ -64,6 +69,29 @@ class IfzsysVisual {
 				});
 				currentAncestor = currentAncestor.parentNode;
 			}
+
+			// if there are dots in the notation, create additional hierarchy levels accordingly
+			const regexPointPattern = /[a-z]{1,3} \d{1,3}\.?\d{0,3}(?=\.\d{0,3})/gmi;
+			let level = notation;
+			const regexAncestors = [];
+			while (regexPointPattern.test(level)) {
+				level = level.match(regexPointPattern)[0];
+				const regexElement = xmlDoc.getElementsByTagName(level.replace(/ /, '_'))[0];
+				if (regexElement) {
+					const regexAncestorNotation = regexElement.nodeName;
+					const regexAncestorName = regexElement.getAttribute('Benennung');
+					regexAncestors.push({
+						notation: regexAncestorNotation,
+						name: regexAncestorName,
+					});
+				}
+			}
+			ancestors.unshift(...regexAncestors);
+			// add the current notation itself to the array
+			ancestors.unshift({
+				notation: notationElement.nodeName,
+				name: notationElement.getAttribute('Benennung')
+			})
 
 			const notationInfo = {
 				notation,
@@ -80,21 +108,30 @@ class IfzsysVisual {
 	renderHTML(element, notationInfo) {
 		// Create a button for collapsible content
 		const collapsibleButton = document.createElement('button');
-		collapsibleButton.className = 'collapsible';
-		collapsibleButton.innerHTML = `<a href="${ifzOpacSearchURL}${encodeURIComponent(notationInfo.notation)}" target="_blank" title="Suche im OPAC (neuer Tab)">${notationInfo.notation.replaceAll('_', ' ')}</a>: ${notationInfo.name}`;
+		collapsibleButton.className = 'ifzsys-collapsible';
+		collapsibleButton.innerHTML = `<div><a href="${ifzOpacSearchURL}${encodeURIComponent(notationInfo.notation)}" target="_blank" title="Suche im OPAC (neuer Tab)">${notationInfo.notation.replaceAll('_', ' ')}</a>:</div><div>${notationInfo.name}</div>`;
 
 		// Create a div for the content
 		const contentDiv = document.createElement('div');
-		contentDiv.className = 'content';
+		contentDiv.className = 'ifzsys-content';
 
 		// Populate the contentDiv with ancestor notations and verbalizations
 		const ancestors = notationInfo.ancestors;
 		if (ancestors && ancestors.length > 0) {
 			for (const [index, ancestor] of ancestors.entries()) {
-				const paragraph = document.createElement('div');
-				const arrowIfNotFirst = (index === ancestors.length - 1) ? '' : '↳ ';
-				paragraph.innerHTML = `${arrowIfNotFirst}<a href="${ifzSystematikURL}" target="_blank" title="Zur Systematik-Website (neuer Tab)">${ancestor.notation.replaceAll('_', ' ')}</a>: ${ancestor.name}`;
-				contentDiv.prepend(paragraph);
+				const notationDiv = document.createElement('div');
+				const spaces = (index === ancestors.length - 1) ? '' : '&nbsp;'.repeat((ancestors.length - index - 2) * 3);
+				const arrowIfNotFirst = (index === ancestors.length - 1) ? '' : `${spaces}↳ `;
+				notationDiv.innerHTML = `${arrowIfNotFirst}<a href="${ifzSystematikURL}" target="_blank" title="Zur Systematik-Website (neuer Tab)">${ancestor.notation.replaceAll('_', ' ')}</a>:`;
+				const benennungDiv = document.createElement('div');
+				benennungDiv.innerHTML = `${ancestor.name}`;
+				const levelDiv = document.createElement('div');
+				levelDiv.append(notationDiv);
+				levelDiv.append(benennungDiv);
+				if (index === 0) {
+					levelDiv.classList.add('ifzsys-current');
+				}
+				contentDiv.prepend(levelDiv);
 			}
 		}
 
@@ -105,8 +142,9 @@ class IfzsysVisual {
 
 		// Add click event listener to toggle the content visibility
 		collapsibleButton.addEventListener('click', () => {
-			contentDiv.classList.toggle('active');
-			const maxHeight = contentDiv.classList.contains('active') ? contentDiv.scrollHeight + 'px' : '0';
+			collapsibleButton.classList.toggle('ifzsys-active');
+			contentDiv.classList.toggle('ifzsys-active');
+			const maxHeight = contentDiv.classList.contains('ifzsys-active') ? contentDiv.scrollHeight + 'px' : '0';
 			contentDiv.style.maxHeight = maxHeight;
 		});
 	}
@@ -114,12 +152,12 @@ class IfzsysVisual {
 	renderError(element, notation) {
 		// Create a button for collapsible content
 		const collapsibleButton = document.createElement('button');
-		collapsibleButton.className = 'collapsible';
+		collapsibleButton.className = 'ifzsys-collapsible';
 		collapsibleButton.innerHTML = `${notation.replaceAll('_', ' ')}`;
 
 		// Create a div for the content
 		const contentDiv = document.createElement('div');
-		contentDiv.className = 'content';
+		contentDiv.className = 'ifzsys-content';
 		contentDiv.innerHTML = `<p>Diese Notation konnte in der <a href="${ifzSystematikURL}" target="_blank">aktuellen Version der IfZ-Systematik</a> nicht gefunden werden.</p>`;
 
 		// Append elements to the element
@@ -129,8 +167,9 @@ class IfzsysVisual {
 
 		// Add click event listener to toggle the content visibility
 		collapsibleButton.addEventListener('click', () => {
-			contentDiv.classList.toggle('active');
-			const maxHeight = contentDiv.classList.contains('active') ? contentDiv.scrollHeight + 'px' : '0';
+			collapsibleButton.classList.toggle('ifzsys-active');
+			contentDiv.classList.toggle('ifzsys-active');
+			const maxHeight = contentDiv.classList.contains('ifzsys-active') ? contentDiv.scrollHeight + 'px' : '0';
 			contentDiv.style.maxHeight = maxHeight;
 		});
 	}

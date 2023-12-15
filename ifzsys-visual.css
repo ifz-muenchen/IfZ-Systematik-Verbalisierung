@@ -1,35 +1,65 @@
-.collapsible {
+.ifzsys-collapsible {
   background-color: white;
-  cursor: help;
-  padding: 5px 0 5px 0;
+  padding: 5px 30px 5px 0; /* 30px right to have some distance to the plus sign */
   width: 100%;
   border: none;
   text-align: left;
   outline: none;
   font-family:inherit;
   font-size: inherit;
+  transition: color 0.2s ease-out, cursor 0.2s ease-out;
+  position: relative;
 }
 
-.active, .collapsible:hover {
+.ifzsys-collapsible.ifzsys-active,
+.ifzsys-collapsible.ifzsys-active a {
+  color: #cccccc;
+}
+
+.ifzsys-active, .ifzsys-collapsible:hover {
   background-color: #f4f4f4;
 }
 
-.collapsible:after {
-  content: '\002B';
-  color: default; /* text color for the plus sign */
-  font-weight: bold;
-  float: right;
-  margin-left: 5px;
+.ifzsys-collapsible:after {
+  content: '\002B'; /* plus sign */
+  position: absolute;
+  right: 0;
+  margin-right: 5px;
+  margin-left: 10px;
 }
 
-.active:after {
+.ifzsys-active:after {
   content: "";
 }
 
-.content {
-  padding: 0 18px;
-  max-height: 0;
+.ifzsys-content {
+  padding: 0 30px 0 10px;
+  max-height: 0; /* make element invisible when not active */
   overflow: hidden;
   transition: max-height 0.2s ease-out;
   background-color: #f4f4f4;
+}
+
+.ifzsys-content.ifzsys-active {
+  border-left: 2px dotted;
+}
+
+.ifzsys-content > div,
+.ifzsys-collapsible {
+  display: flex;
+  align-items: baseline;
+}
+
+.ifzsys-content > div > div:first-child,
+.ifzsys-collapsible > div:first-child {
+  white-space: nowrap;
+}
+
+.ifzsys-content > div > div:not(:first-child),
+.ifzsys-collapsible > div:not(:first-child) {
+  margin-left: 2px;
+}
+
+.ifzsys-current > div:not(:first-child) {
+  font-weight: bold;
 }
