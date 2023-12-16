@@ -45,21 +45,48 @@
 }
 
 .ifzsys-content > div,
+.ifzsys-tooltipDiv > div,
 .ifzsys-collapsible {
   display: flex;
   align-items: baseline;
 }
 
 .ifzsys-content > div > div:first-child,
+.ifzsys-tooltipDiv > div > div:first-child,
 .ifzsys-collapsible > div:first-child {
   white-space: nowrap;
 }
 
 .ifzsys-content > div > div:not(:first-child),
+.ifzsys-tooltipDiv > div > div:not(:first-child),
 .ifzsys-collapsible > div:not(:first-child) {
   margin-left: 2px;
 }
 
 .ifzsys-current > div:not(:first-child) {
   font-weight: bold;
+}
+
+.ifzsys-tooltip {
+  position: relative;
+}
+
+.ifzsys-tooltipDiv {
+  display: none;
+  position: absolute;
+  background-color: #f4f4f4;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 8px;
+  z-index: 1;
+  left: 0; /* Align left border with the parent .ifzsys-tooltip */
+  white-space: nowrap;
+}
+
+.ifzsys-tooltip:hover .ifzsys-tooltipDiv {
+  display: block;
+}
+
+.ifzsys-tooltip:hover {
+  background-color: #f4f4f4;
 }

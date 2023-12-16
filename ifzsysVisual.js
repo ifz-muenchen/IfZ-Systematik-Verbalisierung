@@ -105,7 +105,7 @@ class IfzsysVisual {
 		return null;
 	}
 
-	renderHTML(element, notationInfo) {
+	renderHTML(element, notationInfo, renderAsTooltip) {
 		// Create a button for collapsible content
 		const collapsibleButton = document.createElement('button');
 		collapsibleButton.className = 'ifzsys-collapsible';
@@ -113,7 +113,7 @@ class IfzsysVisual {
 
 		// Create a div for the content
 		const contentDiv = document.createElement('div');
-		contentDiv.className = 'ifzsys-content';
+		contentDiv.className = (renderAsTooltip) ? 'ifzsys-tooltipDiv' : 'ifzsys-content';
 
 		// Populate the contentDiv with ancestor notations and verbalizations
 		const ancestors = notationInfo.ancestors;
@@ -135,18 +135,22 @@ class IfzsysVisual {
 			}
 		}
 
-		// Append elements to the element
-		element.innerHTML = ''; // Clear existing content
-		element.append(collapsibleButton);
+		if (!renderAsTooltip) {
+			// Append elements to the element
+			element.innerHTML = ''; // Clear existing content
+			element.append(collapsibleButton);
+		}
 		element.append(contentDiv);
 
-		// Add click event listener to toggle the content visibility
-		collapsibleButton.addEventListener('click', () => {
-			collapsibleButton.classList.toggle('ifzsys-active');
-			contentDiv.classList.toggle('ifzsys-active');
-			const maxHeight = contentDiv.classList.contains('ifzsys-active') ? contentDiv.scrollHeight + 'px' : '0';
-			contentDiv.style.maxHeight = maxHeight;
-		});
+		if (!renderAsTooltip) {
+			// Add click event listener to toggle the content visibility
+			collapsibleButton.addEventListener('click', () => {
+				collapsibleButton.classList.toggle('ifzsys-active');
+				contentDiv.classList.toggle('ifzsys-active');
+				const maxHeight = contentDiv.classList.contains('ifzsys-active') ? contentDiv.scrollHeight + 'px' : '0';
+				contentDiv.style.maxHeight = maxHeight;
+			});
+		}
 	}
 
 	renderError(element, notation) {
@@ -188,7 +192,7 @@ IfzsysVisual.prototype.prepareLinks = function () {
 		const notation = element.textContent;
 		const notationInfo = this.getNotationInfoFromXML(notation);
 		if (notationInfo) {
-			this.renderHTML(element, notationInfo);
+			this.renderHTML(element, notationInfo, element.className.split(' ').includes('ifzsys-tooltip'));
 		} else {
 			console.error('Notation not found: ' + notation);
 			this.renderError(element, notation);
