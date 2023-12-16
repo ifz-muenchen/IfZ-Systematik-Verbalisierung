@@ -120,9 +120,13 @@ class IfzsysVisual {
 		if (ancestors && ancestors.length > 0) {
 			for (const [index, ancestor] of ancestors.entries()) {
 				const notationDiv = document.createElement('div');
-				const spaces = (index === ancestors.length - 1) ? '' : '&nbsp;'.repeat((ancestors.length - index - 2) * 3);
-				const arrowIfNotFirst = (index === ancestors.length - 1) ? '' : `${spaces}↳ `;
-				notationDiv.innerHTML = `${arrowIfNotFirst}<a href="${ifzSystematikURL}" target="_blank" title="Zur Systematik-Website (neuer Tab)">${ancestor.notation.replaceAll('_', ' ')}</a>:`;
+				const notation = ancestor.notation.replaceAll('_', ' ')
+				if (index === ancestors.length - 1) {
+					notationDiv.innerHTML = `<a href="${ifzSystematikURL}#${notation}" target="_blank" title="Zur Systematik-Website (neuer Tab)">${ancestor.notation.replaceAll('_', ' ')}</a>:`;
+				} else {
+					const spaces = '&nbsp;'.repeat((ancestors.length - index - 2) * 3);
+					notationDiv.innerHTML = `${spaces}↳ ${notation}:`;
+				}
 				const benennungDiv = document.createElement('div');
 				benennungDiv.innerHTML = `${ancestor.name}`;
 				const levelDiv = document.createElement('div');
