@@ -1,9 +1,17 @@
 # IfZ-Systematik - Verbalisierung im OPAC
 
-Bei der Titelanzeige im OPAC kann unter dem Reiter *mehr zum Titel* eine Verbalisierung der Sytematikpunkte des Titels angezeigt werden.
-Durch einen Klick auf die Verbalisierung oder das *+-Symbol* in der rechten Ecke wird auch die Einordnung des Systematikpunktes in den größeren Kontext angezeigt.
+Javascript und CSS zur Hinzufügung einer Verbalisierung zu Notationen der [IfZ-Systematik](https://ifz-muenchen.github.io/IfZ-Systematik/sys.xml).
 
-## Im webOPACClient-Code durchgeführte Änderungen
+Das die Notation enthaltende Element kann auf zwei Weisen erweitert werden:
+- `class="ifzsys-expand"`: wandelt das Element in ein *collapsible* um, das eingeklappt nur die Benennung der aktuellen Notation anzeigt, ausgeklappt zusätzlich alle Vorfahren:
+  - r 1-99: Arbeit und Soziales
+    - ↳ r 59: Gesellschaftsstruktur, Sozialstruktur
+      - ↳ r 59.2: Bürgertum, bürgerliche Gesellschaft
+- `class="ifzsys-expand ifzsys-tooltip"`: setzt die Verbalisierung als Tooltip um.
+
+## Anwendungsbeispiel: Integration in den SISIS-Sunrise webOPACClient
+
+Die folgenden Einstellungen ermöglichen eine Auflösung der IfZ-Systematik-Notationen in der Kurzanzeige eines Titels (als Tooltip) und in "ehr zum Titel" (als *collapsible*).
 
 **jsp -> common -> metaHeader.jsp**
 
