@@ -85,6 +85,7 @@
 
 .ifzsys-tooltip:hover .ifzsys-tooltipDiv {
   display: block;
+  top: 100%;
 }
 
 .ifzsys-tooltip:hover {
