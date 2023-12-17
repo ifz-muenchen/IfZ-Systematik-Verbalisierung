@@ -51,6 +51,12 @@
   align-items: baseline;
 }
 
+.ifzsys-collapsible > div:first-child,
+.ifzsys-content > div > div:first-child {
+  width: max-content;
+  flex-shrink: 0;
+}
+
 .ifzsys-content > div > div:first-child,
 .ifzsys-tooltipDiv > div > div:first-child,
 .ifzsys-collapsible > div:first-child {
