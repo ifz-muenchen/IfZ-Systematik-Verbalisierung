@@ -14,7 +14,7 @@ Hinzugefügte Zeilen:
 ```
 ---
 
-**jsp -> result -> titelInfo.jsp**
+**jsp -> result -> titleinfo.jsp**
 
 Hinzugefügte Zeilen zum Skript im Kopfbereich:
 ```js
@@ -43,6 +43,33 @@ Veränderter Block:
   </div>
 </c:when>
 ```
+
+**jsp -> result -> teaser.jsp**
+
+Hinzugefügte Zeilen im Kopfbereich (unter `<!-- START jsp/result/teaser.jsp -->`):
+```js
+<script language="javascript" type="text/javascript">
+  // IfZ-Systematik-Verbalisierung beim Seitenaufruf hinzufügen
+  var ifzsysVisual = IfzsysVisual.newInstance('ifzsys-expand');
+  function ifzsys_visual_prepareLinks() {
+    IfzsysVisual.prepareLinks();
+  }
+  window.addEventListener("load", ifzsys_visual_prepareLinks, false);
+</script>
+```
+
+Veränderter Block:
+```jsp
+<c:if test='${fn:length(igf:availableValues(currenthit, "1708, 1708.*")) > 0}'>
+  <strong class="c2">${igf:getCategoryResultLabel("1708", igf:getLanguage(pageContext))}:</strong>          <c:forEach items='${igf:availableCategories(currenthit, "1708,1708.*")}' var="ifznotation" varStatus="status">
+    <%-- IfZ-Systematik-Verbalisierung: class="ifzsys-expand ifzsys-tooltip" hinzugefügt --%>
+    <a class="ifzsys-expand ifzsys-tooltip" href="${igf:getQuickLinkFunction(pageContext, '1708', igf:value(currenthit, ifznotation))}"><c:out value='${igf:value(currenthit, ifznotation)}'/></a>
+      <c:if test='${status.last}'><br/></c:if>
+  </c:forEach>
+</c:if>
+
+```
+
 ---
 
 **Neu erstellte Dateien**
