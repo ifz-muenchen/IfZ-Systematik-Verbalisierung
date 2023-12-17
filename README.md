@@ -16,16 +16,14 @@ Hinzugefügte Zeilen:
 
 **jsp -> result -> titelInfo.jsp**
 
-Hinzugefügte Zeilen:
+Hinzugefügte Zeilen zum Skript im Kopfbereich:
 ```js
-// IfZ Visual
+// IfZ-Systematik-Verbalisierung beim Seitenaufruf hinzufügen
 var ifzsysVisual = IfzsysVisual.newInstance('ifzsys-expand');
-
-// Load RVK data at page load
-function rvk_visual_prepareLinks() {
-  IfzsysVisual.prepareLinks(); // loads data for all IfzsysVisual instances
+function ifzsys_visual_prepareLinks() {
+  IfzsysVisual.prepareLinks();
 }
-window.addEventListener("load", rvk_visual_prepareLinks, false);
+window.addEventListener("load", ifzsys_visual_prepareLinks, false);
 ```
 
 Veränderter Block:
