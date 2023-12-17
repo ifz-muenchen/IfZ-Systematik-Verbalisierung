@@ -106,7 +106,7 @@ class IfzsysVisual {
 	}
 
 	renderHTML(element, notationInfo, renderAsTooltip) {
-		let containerElement = document.createElement('div');
+		let containerElement;
 		// Create a button for collapsible content
 		const collapsibleButton = document.createElement('button');
 
@@ -169,33 +169,32 @@ class IfzsysVisual {
 		element.parentNode.replaceChild(containerElement, element);
 	}
 
-	renderError(element, notation) {
-		// Create a new div element that will replace the ifzsys-expand element
-		const containerElement = document.createElement('div');
+	renderError(element, renderAsTooltip) {
+		// Remove the 'ifzsys-expand' class so that IfZsys-Visual will not touch this container a second time
+		element.classList.remove('ifzsys-expand');
 
-		// Create a button for collapsible content
-		const collapsibleButton = document.createElement('button');
-		collapsibleButton.className = 'ifzsys-collapsible';
-		collapsibleButton.innerHTML = `${notation.replaceAll('_', ' ')}`;
-
-		// Create a div for the content
+		// Create a div for the error tooltip
 		const contentDiv = document.createElement('div');
-		contentDiv.className = 'ifzsys-content';
-		contentDiv.innerHTML = `<p>Diese Notation konnte in der <a href="${ifzSystematikURL}" target="_blank">aktuellen Version der IfZ-Systematik</a> nicht gefunden werden.</p>`;
+		contentDiv.className = 'ifzsys-tooltipDiv';
+		contentDiv.innerHTML = `Diese Notation konnte in der <a href="${ifzSystematikURL}" target="_blank">aktuellen Version der IfZ-Systematik</a> nicht gefunden werden.`;
 
-		// Append elements to the containerElement
-		containerElement.append(collapsibleButton);
-		containerElement.append(contentDiv);
+		// Append tooltip content to the element
+		element.append(contentDiv);
 
-		// Add click event listener to toggle the content visibility
-		collapsibleButton.addEventListener('click', () => {
-			collapsibleButton.classList.toggle('ifzsys-active');
-			contentDiv.classList.toggle('ifzsys-active');
-			const maxHeight = contentDiv.classList.contains('ifzsys-active') ? contentDiv.scrollHeight + 'px' : '0';
-			contentDiv.style.maxHeight = maxHeight;
-		});
-		// Replace the original element with the new container element
-		element.parentNode.replaceChild(containerElement, element);
+		// Surround the element with a div so that it is formatted in accordance with the non-error elements
+		if (!renderAsTooltip) {
+			// Create a new div element that surrounds a cloned version of the original element
+			const containerElement = document.createElement('div');
+			// add class name for tooltip css to work
+			element.className = "ifzsys-tooltip";
+			containerElement.appendChild(element.cloneNode(true));
+
+			// Insert the container before the original element in the DOM
+			element.parentNode.insertBefore(containerElement, element);
+
+			// Remove the original element from its previous position
+			element.parentNode.removeChild(element);
+		}
 	}
 }
 
@@ -211,11 +210,11 @@ IfzsysVisual.prototype.prepareLinks = function () {
 	for (const element of ifzsysElements) {
 		const notation = element.textContent.trim();
 		const notationInfo = this.getNotationInfoFromXML(notation);
+		const renderAsTooltip = element.className.split(' ').includes('ifzsys-tooltip');
 		if (notationInfo) {
-			this.renderHTML(element, notationInfo, element.className.split(' ').includes('ifzsys-tooltip'));
+			this.renderHTML(element, notationInfo, renderAsTooltip);
 		} else {
-			console.error('Notation not found: ' + notation);
-			this.renderError(element, notation);
+			this.renderError(element, renderAsTooltip);
 		}
 	}
 };
