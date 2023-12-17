@@ -209,7 +209,7 @@ function loadXMLDoc(filename) {
 IfzsysVisual.prototype.prepareLinks = function () {
 	const ifzsysElements = Array.from(document.querySelectorAll(`.${this.ifzsysClassName}`));
 	for (const element of ifzsysElements) {
-		const notation = element.textContent;
+		const notation = element.textContent.trim();
 		const notationInfo = this.getNotationInfoFromXML(notation);
 		if (notationInfo) {
 			this.renderHTML(element, notationInfo, element.className.split(' ').includes('ifzsys-tooltip'));

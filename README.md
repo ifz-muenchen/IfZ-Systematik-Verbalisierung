@@ -3,7 +3,7 @@
 Bei der Titelanzeige im OPAC kann unter dem Reiter *mehr zum Titel* eine Verbalisierung der Sytematikpunkte des Titels angezeigt werden.
 Durch einen Klick auf die Verbalisierung oder das *+-Symbol* in der rechten Ecke wird auch die Einordnung des Systematikpunktes in den größeren Kontext angezeigt.
 
-## Im OPAC-Code durchgeführte Änderungen
+## Im webOPACClient-Code durchgeführte Änderungen
 
 **jsp -> common -> metaHeader.jsp**
 
@@ -30,14 +30,18 @@ Veränderter Block:
 ```jsp
 <c:when test='${fn:indexOf(content.key, "1708.1") != -1 && fn:endsWith(content.key, "1708.1")}'>
   <strong class="c2">${igf:getCategoryResultLabel("1708", igf:getLanguage(pageContext))}:</strong>
+  <%-- IfZ-Systematik-Verbalisierung: umgebendes div hinzugefügt --%>
   <div>
     <c:forEach items='${igf:availableCategories(currenthit, "1708,1708.*")}' var="ifznotation" varStatus="status">
-      <%-- <a href="${igf:getQuickLinkFunction(pageContext, '1708', igf:value(currenthit, ifznotation))}">--%>
-      <div class="ifzsys-expand"><c:out value='${igf:value(currenthit, ifznotation)}'/></div>
-    <c:if test='${status.last}'></c:if>
+      <%-- IfZ-Systematik-Verbalisierung: class="ifzsys-expand" hinzugefügt --%>
+      <a class="ifzsys-expand" href="${igf:getQuickLinkFunction(pageContext, '1708', igf:value(currenthit, ifznotation))}">
+        <c:out value='${igf:value(currenthit, ifznotation)}'/>
+      </a>
+      <c:if test='${status.last}'></c:if>
     </c:forEach>
+  <%-- IfZ-Systematik-Verbalisierung: br entfernt, umgebendes div hinzugefügt --%>
   </div>
-</c:when> 
+</c:when>
 ```
 ---
 
