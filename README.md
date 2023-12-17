@@ -11,7 +11,7 @@ Das die Notation enthaltende Element kann auf zwei Weisen erweitert werden:
 
 ## Anwendungsbeispiel: Integration in den SISIS-Sunrise webOPACClient
 
-Die folgenden Einstellungen ermöglichen eine Auflösung der IfZ-Systematik-Notationen in der Kurzanzeige eines Titels (als Tooltip) und in "ehr zum Titel" (als *collapsible*).
+Die folgenden Einstellungen ermöglichen eine Auflösung der IfZ-Systematik-Notationen in der Kurzanzeige eines Titels (als Tooltip) und in "mehr zum Titel" (als *collapsible*).
 
 **jsp -> common -> metaHeader.jsp**
 
