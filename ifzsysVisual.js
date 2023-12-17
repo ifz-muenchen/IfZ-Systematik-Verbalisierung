@@ -106,10 +106,22 @@ class IfzsysVisual {
 	}
 
 	renderHTML(element, notationInfo, renderAsTooltip) {
+		let containerElement = document.createElement('div');
 		// Create a button for collapsible content
 		const collapsibleButton = document.createElement('button');
-		collapsibleButton.className = 'ifzsys-collapsible';
-		collapsibleButton.innerHTML = `<div><a href="${ifzOpacSearchURL}${encodeURIComponent(notationInfo.notation)}" target="_blank" title="Suche im OPAC (neuer Tab)">${notationInfo.notation.replaceAll('_', ' ')}</a>:</div><div>${notationInfo.name}</div>`;
+
+		if (renderAsTooltip) {
+			// don't change the containing a element
+			containerElement = element;
+			// Remove the 'ifzsys-expand' class so that IfZsys-Visual will not touch this container a second time
+			containerElement.classList.remove('ifzsys-expand');
+		} else {
+			// Create a new div element that will replace the ifzsys-expand element
+			containerElement = document.createElement('div');
+			// design collapsible button
+			collapsibleButton.className = 'ifzsys-collapsible';
+			collapsibleButton.innerHTML = `<div><a href="${ifzOpacSearchURL}${encodeURIComponent(notationInfo.notation)}" target="_blank" title="Suche im OPAC (neuer Tab)">${notationInfo.notation.replaceAll('_', ' ')}</a>:</div><div>${notationInfo.name}</div>`;
+		}
 
 		// Create a div for the content
 		const contentDiv = document.createElement('div');
@@ -140,11 +152,9 @@ class IfzsysVisual {
 		}
 
 		if (!renderAsTooltip) {
-			// Append elements to the element
-			element.innerHTML = ''; // Clear existing content
-			element.append(collapsibleButton);
+			containerElement.append(collapsibleButton);
 		}
-		element.append(contentDiv);
+		containerElement.append(contentDiv);
 
 		if (!renderAsTooltip) {
 			// Add click event listener to toggle the content visibility
@@ -155,9 +165,14 @@ class IfzsysVisual {
 				contentDiv.style.maxHeight = maxHeight;
 			});
 		}
+		// Replace the original element with the new container element
+		element.parentNode.replaceChild(containerElement, element);
 	}
 
 	renderError(element, notation) {
+		// Create a new div element that will replace the ifzsys-expand element
+		const containerElement = document.createElement('div');
+
 		// Create a button for collapsible content
 		const collapsibleButton = document.createElement('button');
 		collapsibleButton.className = 'ifzsys-collapsible';
@@ -168,10 +183,9 @@ class IfzsysVisual {
 		contentDiv.className = 'ifzsys-content';
 		contentDiv.innerHTML = `<p>Diese Notation konnte in der <a href="${ifzSystematikURL}" target="_blank">aktuellen Version der IfZ-Systematik</a> nicht gefunden werden.</p>`;
 
-		// Append elements to the element
-		element.innerHTML = ''; // Clear existing content
-		element.append(collapsibleButton);
-		element.append(contentDiv);
+		// Append elements to the containerElement
+		containerElement.append(collapsibleButton);
+		containerElement.append(contentDiv);
 
 		// Add click event listener to toggle the content visibility
 		collapsibleButton.addEventListener('click', () => {
@@ -180,6 +194,8 @@ class IfzsysVisual {
 			const maxHeight = contentDiv.classList.contains('ifzsys-active') ? contentDiv.scrollHeight + 'px' : '0';
 			contentDiv.style.maxHeight = maxHeight;
 		});
+		// Replace the original element with the new container element
+		element.parentNode.replaceChild(containerElement, element);
 	}
 }
 
